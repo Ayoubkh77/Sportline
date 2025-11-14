@@ -2,57 +2,182 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Produits - SportLine</title>
+    <title>SportLine - Boutique</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background:#0d0d0d; color:white; font-family: 'Orbitron', sans-serif; }
-        h1 { color:#00f0ff; text-shadow:0 0 8px #00f0ff; }
-        .card { background:#001f3f; border:1px solid #00f0ff; color:white; margin-bottom:20px; }
-        a { color:#00f0ff; margin-right:15px; text-decoration:none; }
-        a:hover { text-decoration:underline; }
+        body { background: #f5f7fa; font-family: "Poppins", sans-serif; }
+        nav.navbar { background: #0072ce; }
+        nav.navbar .navbar-brand, nav.navbar .nav-link { color: white; }
+        nav.navbar .nav-link:hover { color: #ffa447; }
+        .sidebar { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .category-item { cursor:pointer; margin:5px 0; }
+        .product-card { background: white; border-radius: 15px; padding: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s; position: relative; }
+        .product-card:hover { transform: translateY(-7px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+        .size-btn { border: 1px solid #0072ce; border-radius: 10px; padding: 5px 12px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .size-btn:hover, .size-btn.selected { background: #0072ce; color: white; }
+        .add-cart { background: #ff7b00; border: none; padding: 10px 20px; border-radius: 10px; color: white; font-size: 1rem; font-weight: 600; transition: 0.2s; }
+        .add-cart:hover { background: #ffa447; }
+        .badge-new { position: absolute; top: 15px; left: 15px; background: #28a745; color: white; padding: 5px 10px; border-radius: 10px; font-size: 0.8rem; }
+        .badge-sale { position: absolute; top: 15px; right: 15px; background: #dc3545; color: white; padding: 5px 10px; border-radius: 10px; font-size: 0.8rem; }
+        #cart { position: fixed; right: 20px; top: 100px; background: white; border-radius: 15px; padding: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); width: 220px; z-index: 1000; }
+        #cart h5 { font-size: 1rem; margin-bottom: 10px; }
+        #cart ul { list-style: none; padding-left: 0; max-height: 300px; overflow-y: auto; }
+        #cart ul li { margin-bottom: 8px; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
-<nav style="background:#0072ce; padding:10px;">
-    <a href="/Sportline">Accueil</a>
-    <a href="/Sportline/a-propos">À propos</a>
-    <a href="/Sportline/produits">Produits</a>
-    <a href="/Sportline/contact">Contact</a>
-    <a href="/Sportline/inscription">S'inscrire</a>
+<!-- Menu principal -->
+<nav class="navbar navbar-expand-lg mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="#">SportLine</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarMenu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#" id="home-link">Accueil</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Produits</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Panier</a></li>
+            </ul>
+        </div>
+    </div>
 </nav>
 
 <div class="container py-5">
-    <h1>Nos Produits</h1>
     <div class="row">
-        <div class="col-md-4">
-            <div class="card p-3 text-center">
-                <h5>Chaussures de running</h5>
-                <p>Confort et performance</p>
-                <p>Prix: 89€</p>
+
+        <!-- Sidebar -->
+        <div class="col-md-3">
+            <div class="sidebar">
+                <h5 class="fw-bold mb-3">Catégories</h5>
+                <div class="category-item fw-bold text-primary" data-category="">Tous</div>
+                <div class="category-item" data-category="Chaussures">Chaussures</div>
+                <div class="category-item" data-category="T-Shirts">T-Shirts</div>
+                <div class="category-item" data-category="Shorts">Shorts</div>
+                <div class="category-item" data-category="Accessoires">Accessoires</div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card p-3 text-center">
-                <h5>T-shirt sport</h5>
-                <p>Léger et respirant</p>
-                <p>Prix: 25€</p>
-            </div>
+
+        <!-- Produits -->
+        <div class="col-md-9">
+            <div class="row g-4" id="products"></div>
         </div>
-        <div class="col-md-4">
-            <div class="card p-3 text-center">
-                <h5>Sac de sport</h5>
-                <p>Grande capacité</p>
-                <p>Prix: 45€</p>
-            </div>
-        </div>
+
     </div>
 </div>
 
-<footer style="background:#002d5c; color:white; text-align:center; padding:10px;">
-    © 2025 SportLine. Tous droits réservés.
-</footer>
+<!-- Panier flottant -->
+<div id="cart">
+    <h5>Panier</h5>
+    <ul id="cart-items"></ul>
+    <strong>Total: <span id="cart-total">0 €</span></strong>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const productsData = [
+        {name:"Chaussures Running Pro", price:120, category:"Chaussures", sizes:["39","40","41","42"], img:"images/produits/shoes1.jpg", badge:"new"},
+        {name:"Chaussures Trail Max", price:140, category:"Chaussures", sizes:["38","39","40","41"], img:"images/produits/shoes2.jpg", badge:"sale"},
+        {name:"Chaussures Urban", price:130, category:"Chaussures", sizes:["39","40","41","42"], img:"images/produits/shoes3.jpg"},
+        {name:"T-Shirt Performance", price:35, category:"T-Shirts", sizes:["S","M","L","XL"], img:"images/produits/tshirt1.jpg"},
+        {name:"T-Shirt Fitness", price:40, category:"T-Shirts", sizes:["S","M","L","XL"], img:"images/produits/tshirt2.jpg", badge:"sale"},
+        {name:"T-Shirt Running", price:38, category:"T-Shirts", sizes:["S","M","L","XL"], img:"images/produits/tshirt3.jpg"},
+        {name:"Short Ultra Light", price:25, category:"Shorts", sizes:["S","M","L","XL"], img:"images/produits/shorts1.jpg"},
+        {name:"Short Jogging", price:30, category:"Shorts", sizes:["S","M","L","XL"], img:"images/produits/shorts2.jpg"},
+        {name:"Casquette Sport", price:15, category:"Accessoires", sizes:[], img:"images/produits/casquette1.jpg"},
+        {name:"Sac de Sport", price:50, category:"Accessoires", sizes:[], img:"images/produits/sac1.jpg"}
+
+    ];
+
+    const cart = [];
+    const productsContainer = document.getElementById('products');
+    const cartItems = document.getElementById('cart-items');
+    const cartTotal = document.getElementById('cart-total');
+
+    function updateCart(){
+        cartItems.innerHTML = '';
+        let total = 0;
+        cart.forEach(item => {
+            cartItems.innerHTML += `<li>${item.name} ${item.size ? '('+item.size+')':''} - ${item.price}€</li>`;
+            total += item.price;
+        });
+        cartTotal.textContent = total + ' €';
+    }
+
+    function createProductCard(product){
+        const col = document.createElement('div');
+        col.className = "col-md-6 col-lg-4 product-item";
+        col.dataset.category = product.category;
+
+        let sizesHTML = '';
+        product.sizes.forEach(size => sizesHTML += `<div class="size-btn">${size}</div>`);
+
+        let badgeHTML = '';
+        if(product.badge === "new") badgeHTML = `<div class="badge-new">Nouveau</div>`;
+        if(product.badge === "sale") badgeHTML = `<div class="badge-sale">Promo</div>`;
+
+        col.innerHTML = `
+            <div class="product-card">
+                ${badgeHTML}
+                <img src="${product.img}" alt="${product.name}" class="img-fluid rounded mb-3">
+                <h5 class="fw-bold">${product.name}</h5>
+                <p class="text-muted"></p>
+                <h6 class="fw-bold text-primary">${product.price} €</h6>
+                <div class="d-flex gap-2 flex-wrap my-2">${sizesHTML}</div>
+                <button class="add-cart">Ajouter au panier</button>
+            </div>
+        `;
+
+        const card = col.querySelector('.product-card');
+        let selectedSize = null;
+        card.querySelectorAll('.size-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                card.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedSize = btn.textContent;
+            });
+        });
+
+        card.querySelector('.add-cart').addEventListener('click', () => {
+            if(product.sizes.length && !selectedSize){
+                alert("Veuillez choisir une taille !");
+                return;
+            }
+            cart.push({name:product.name, size:selectedSize, price:product.price});
+            updateCart();
+            alert("Produit ajouté au panier !");
+        });
+
+        productsContainer.appendChild(col);
+    }
+
+    productsData.forEach(p => createProductCard(p));
+
+    // Filtrage catégorie fonctionnel
+    const categoryItems = document.querySelectorAll('.category-item');
+    categoryItems.forEach(cat => {
+        cat.addEventListener('click', () => {
+            categoryItems.forEach(c => c.classList.remove('fw-bold','text-primary'));
+            cat.classList.add('fw-bold','text-primary');
+
+            const category = cat.dataset.category;
+            document.querySelectorAll('.product-item').forEach(p => {
+                p.style.display = (category === "" || p.dataset.category === category) ? 'block' : 'none';
+            });
+        });
+    });
+
+    // Bouton "Accueil" pour afficher tous les produits
+    document.getElementById('home-link').addEventListener('click', function(e){
+        e.preventDefault();
+        document.querySelectorAll('.product-item').forEach(p => p.style.display = 'block');
+        categoryItems.forEach(c => c.classList.remove('fw-bold','text-primary'));
+        document.querySelector('.category-item[data-category=""]').classList.add('fw-bold','text-primary');
+    });
+
+</script>
+
 </body>
 </html>
