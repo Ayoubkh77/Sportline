@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion - SportLine</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg px-4">
+    <a class="navbar-brand" href="/Sportline">SportLine</a>
+</nav>
+
+<div class="container py-5">
+    <div class="form-box">
+        <h1 class="text-center mb-4">Connexion</h1>
+
+        <p th:if="${error}" class="alert alert-danger text-center">
+            Identifiants incorrects.
+        </p>
+
+        <form action="/Sportline/login" method="post">
+            <label>Email</label>
+            <input class="form-control mb-3" name="username" required>
+
+            <label>Mot de passe</label>
+            <input class="form-control mb-4" type="password" name="password" required>
+
+            <button class="btn btn-futur">Se connecter</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

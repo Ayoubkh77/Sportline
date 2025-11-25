@@ -1,0 +1,52 @@
+<script>
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartTotalSpan = document.getElementById('cart-total');
+
+    function updateCart() {
+        cartItemsContainer.innerHTML = '';
+        let total = 0;
+        cart.forEach((item, index) => {
+            total += item.price * item.quantity;
+            cartItemsContainer.innerHTML += `
+                <div class="cart-item">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="${item.img}" alt="${item.name}">
+                        <div>
+                            <h5>${item.name}</h5>
+                            <p>${item.price} €</p>
+                            ${item.size ? `<p>Taille: ${item.size}</p>` : ''}
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <input type="number" min="1" value="${item.quantity}" class="quantity" data-index="${index}">
+                        <button class="btn-remove" data-index="${index}">Supprimer</button>
+                    </div>
+                </div>
+            `;
+        });
+        cartTotalSpan.textContent = total + ' €';
+        localStorage.setItem('cart', JSON.stringify(cart));
+
+        // Quantité modifiable
+        document.querySelectorAll('.quantity').forEach(input => {
+            input.addEventListener('change', e => {
+                const idx = e.target.dataset.index;
+                cart[idx].quantity = parseInt(e.target.value);
+                updateCart();
+            });
+        });
+
+        // Supprimer article
+        document.querySelectorAll('.btn-remove').forEach(btn => {
+            btn.addEventListener('click', e => {
+                const idx = e.target.dataset.index;
+                cart.splice(idx,1);
+                updateCart();
+            });
+        });
+    }
+
+    updateCart();
+</script>

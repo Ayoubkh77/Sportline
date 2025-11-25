@@ -23,23 +23,27 @@
         #cart h5 { font-size: 1rem; margin-bottom: 10px; }
         #cart ul { list-style: none; padding-left: 0; max-height: 300px; overflow-y: auto; }
         #cart ul li { margin-bottom: 8px; font-size: 0.9rem; }
+        /* Barre recherche */
+        #searchInput { border-radius: 15px; padding: 12px 20px; font-size: 1rem; }
+        /* Moyens de paiement */
+        .payment-methods img { height: 40px; }
     </style>
 </head>
 <body>
 
-<!-- Menu principal -->
+<!-- Navbar -->
 <nav class="navbar navbar-expand-lg mb-4">
     <div class="container">
-        <a class="navbar-brand" href="#">SportLine</a>
+        <a class="navbar-brand" href="/Sportline">SportLine</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarMenu">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="#" id="home-link">Accueil</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Produits</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Panier</a></li>
+                <li class="nav-item"><a class="nav-link" href="/Sportline">Accueil</a></li>
+                <li class="nav-item"><a class="nav-link" href="/Sportline/produits">Produits</a></li>
+                <li class="nav-item"><a class="nav-link" href="/Sportline/contact">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" id="authBtn">S'inscrire / Login</a></li>
             </ul>
         </div>
     </div>
@@ -62,11 +66,27 @@
 
         <!-- Produits -->
         <div class="col-md-9">
+            <!-- Barre de recherche -->
+            <div class="mb-4">
+                <input type="text" id="searchInput" class="form-control form-control-lg" placeholder="Rechercher un produit...">
+            </div>
+
             <div class="row g-4" id="products"></div>
         </div>
 
     </div>
 </div>
+
+<!-- Moyens de paiement -->
+<section class="container text-center my-5">
+    <h4 class="fw-bold mb-3">Moyens de paiement acceptés</h4>
+    <div class="d-flex justify-content-center align-items-center gap-4 flex-wrap payment-methods">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/MasterCard_Logo.svg" alt="MasterCard">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Paypal.svg" alt="PayPal">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Apple_Pay_logo.svg" alt="Apple Pay">
+    </div>
+</section>
 
 <!-- Panier flottant -->
 <div id="cart">
@@ -75,36 +95,108 @@
     <strong>Total: <span id="cart-total">0 €</span></strong>
 </div>
 
+<!-- Modal Auth -->
+<div class="modal fade" id="authModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-3">
+            <div class="modal-header">
+                <h5 class="modal-title">Connexion / Inscription</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs" id="authTab" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#loginTab">Login</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#registerTab">Inscription</button>
+                    </li>
+                </ul>
+                <div class="tab-content mt-3">
+                    <div class="tab-pane fade show active" id="loginTab">
+                        <form id="loginForm">
+                            <div class="mb-3"><input type="email" class="form-control" placeholder="Email" required></div>
+                            <div class="mb-3"><input type="password" class="form-control" placeholder="Mot de passe" required></div>
+                            <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="registerTab">
+                        <form id="registerForm">
+                            <div class="mb-3"><input type="text" class="form-control" placeholder="Prénom" required></div>
+                            <div class="mb-3"><input type="text" class="form-control" placeholder="Nom" required></div>
+                            <div class="mb-3"><input type="email" class="form-control" placeholder="Email" required></div>
+                            <div class="mb-3"><input type="password" class="form-control" placeholder="Mot de passe" required></div>
+                            <div class="mb-3"><input type="password" class="form-control" placeholder="Confirmer le mot de passe" required></div>
+                            <button type="submit" class="btn btn-success w-100">S'inscrire</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="text-center py-4" style="background:#0072ce; color:white;">
+    <p>&copy; 2025 SportLine | <a href="#" style="color:#aee6ff;">Mentions légales</a> | <a href="#" style="color:#aee6ff;">Politique de confidentialité</a></p>
+</footer>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    const productsData = [
-        {name:"Chaussures Running Pro", price:120, category:"Chaussures", sizes:["39","40","41","42"], img:"images/produits/shoes1.jpg", badge:"new"},
-        {name:"Chaussures Trail Max", price:140, category:"Chaussures", sizes:["38","39","40","41"], img:"images/produits/shoes2.jpg", badge:"sale"},
-        {name:"Chaussures Urban", price:130, category:"Chaussures", sizes:["39","40","41","42"], img:"images/produits/shoes3.jpg"},
-        {name:"T-Shirt Performance", price:35, category:"T-Shirts", sizes:["S","M","L","XL"], img:"images/produits/tshirt1.jpg"},
-        {name:"T-Shirt Fitness", price:40, category:"T-Shirts", sizes:["S","M","L","XL"], img:"images/produits/tshirt2.jpg", badge:"sale"},
-        {name:"T-Shirt Running", price:38, category:"T-Shirts", sizes:["S","M","L","XL"], img:"images/produits/tshirt3.jpg"},
-        {name:"Short Ultra Light", price:25, category:"Shorts", sizes:["S","M","L","XL"], img:"images/produits/shorts1.jpg"},
-        {name:"Short Jogging", price:30, category:"Shorts", sizes:["S","M","L","XL"], img:"images/produits/shorts2.jpg"},
-        {name:"Casquette Sport", price:15, category:"Accessoires", sizes:[], img:"images/produits/casquette1.jpg"},
-        {name:"Sac de Sport", price:50, category:"Accessoires", sizes:[], img:"images/produits/sac1.jpg"}
+    // ======= Auth & Panier =======
+    let userLoggedIn = JSON.parse(localStorage.getItem('user')) || null;
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    ];
-
-    const cart = [];
-    const productsContainer = document.getElementById('products');
-    const cartItems = document.getElementById('cart-items');
-    const cartTotal = document.getElementById('cart-total');
+    const authModal = new bootstrap.Modal(document.getElementById('authModal'));
+    const cartItemsEl = document.getElementById('cart-items');
+    const cartTotalEl = document.getElementById('cart-total');
 
     function updateCart(){
-        cartItems.innerHTML = '';
+        cartItemsEl.innerHTML = '';
         let total = 0;
         cart.forEach(item => {
-            cartItems.innerHTML += `<li>${item.name} ${item.size ? '('+item.size+')':''} - ${item.price}€</li>`;
             total += item.price;
+            cartItemsEl.innerHTML += `<li>${item.name} ${item.size ? '('+item.size+')':''} - ${item.price}€</li>`;
         });
-        cartTotal.textContent = total + ' €';
+        cartTotalEl.textContent = total + ' €';
+        localStorage.setItem('cart', JSON.stringify(cart));
     }
+
+    document.getElementById('authBtn').addEventListener('click', e=>{
+        authModal.show();
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', e=>{
+        e.preventDefault();
+        userLoggedIn = {email: e.target[0].value};
+        localStorage.setItem('user', JSON.stringify(userLoggedIn));
+        authModal.hide();
+        alert("Connecté !");
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', e=>{
+        e.preventDefault();
+        userLoggedIn = {email: e.target[2].value, name: e.target[0].value};
+        localStorage.setItem('user', JSON.stringify(userLoggedIn));
+        authModal.hide();
+        alert("Inscription réussie !");
+    });
+
+    // ======= Produits =======
+    const productsData = [
+        {name:"Chaussures Running Pro", price:120, category:"Chaussures", sizes:["39","40","41","42"], img:"https://via.placeholder.com/400x300?text=Chaussure+1", badge:"new"},
+        {name:"Chaussures Trail Max", price:140, category:"Chaussures", sizes:["38","39","40","41"], img:"https://via.placeholder.com/400x300?text=Chaussure+2", badge:"sale"},
+        {name:"Chaussures Urban", price:130, category:"Chaussures", sizes:["39","40","41","42"], img:"https://via.placeholder.com/400x300?text=Chaussure+3"},
+        {name:"T-Shirt Performance", price:35, category:"T-Shirts", sizes:["S","M","L","XL"], img:"https://via.placeholder.com/400x300?text=T-Shirt+1"},
+        {name:"T-Shirt Fitness", price:40, category:"T-Shirts", sizes:["S","M","L","XL"], img:"https://via.placeholder.com/400x300?text=T-Shirt+2", badge:"sale"},
+        {name:"T-Shirt Running", price:38, category:"T-Shirts", sizes:["S","M","L","XL"], img:"https://via.placeholder.com/400x300?text=T-Shirt+3"},
+        {name:"Short Ultra Light", price:25, category:"Shorts", sizes:["S","M","L","XL"], img:"https://via.placeholder.com/400x300?text=Short+1"},
+        {name:"Short Jogging", price:30, category:"Shorts", sizes:["S","M","L","XL"], img:"https://via.placeholder.com/400x300?text=Short+2"},
+        {name:"Casquette Sport", price:15, category:"Accessoires", sizes:[], img:"https://via.placeholder.com/400x300?text=Casquette"},
+        {name:"Sac de Sport", price:50, category:"Accessoires", sizes:[], img:"https://via.placeholder.com/400x300?text=Sac+de+Sport"}
+    ];
+
+    const productsContainer = document.getElementById('products');
 
     function createProductCard(product){
         const col = document.createElement('div');
@@ -123,7 +215,6 @@
                 ${badgeHTML}
                 <img src="${product.img}" alt="${product.name}" class="img-fluid rounded mb-3">
                 <h5 class="fw-bold">${product.name}</h5>
-                <p class="text-muted"></p>
                 <h6 class="fw-bold text-primary">${product.price} €</h6>
                 <div class="d-flex gap-2 flex-wrap my-2">${sizesHTML}</div>
                 <button class="add-cart">Ajouter au panier</button>
@@ -132,20 +223,24 @@
 
         const card = col.querySelector('.product-card');
         let selectedSize = null;
-        card.querySelectorAll('.size-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
+        card.querySelectorAll('.size-btn').forEach(btn=>{
+            btn.addEventListener('click', ()=>{
                 card.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('selected'));
                 btn.classList.add('selected');
                 selectedSize = btn.textContent;
             });
         });
 
-        card.querySelector('.add-cart').addEventListener('click', () => {
+        card.querySelector('.add-cart').addEventListener('click', ()=>{
+            if(!userLoggedIn){
+                authModal.show();
+                return;
+            }
             if(product.sizes.length && !selectedSize){
                 alert("Veuillez choisir une taille !");
                 return;
             }
-            cart.push({name:product.name, size:selectedSize, price:product.price});
+            cart.push({name: product.name, size: selectedSize, price: product.price});
             updateCart();
             alert("Produit ajouté au panier !");
         });
@@ -155,29 +250,30 @@
 
     productsData.forEach(p => createProductCard(p));
 
-    // Filtrage catégorie fonctionnel
+    // ====== Filtrage catégorie ======
     const categoryItems = document.querySelectorAll('.category-item');
-    categoryItems.forEach(cat => {
-        cat.addEventListener('click', () => {
-            categoryItems.forEach(c => c.classList.remove('fw-bold','text-primary'));
+    categoryItems.forEach(cat=>{
+        cat.addEventListener('click', ()=>{
+            categoryItems.forEach(c=>c.classList.remove('fw-bold','text-primary'));
             cat.classList.add('fw-bold','text-primary');
-
             const category = cat.dataset.category;
-            document.querySelectorAll('.product-item').forEach(p => {
+            document.querySelectorAll('.product-item').forEach(p=>{
                 p.style.display = (category === "" || p.dataset.category === category) ? 'block' : 'none';
             });
         });
     });
 
-    // Bouton "Accueil" pour afficher tous les produits
-    document.getElementById('home-link').addEventListener('click', function(e){
-        e.preventDefault();
-        document.querySelectorAll('.product-item').forEach(p => p.style.display = 'block');
-        categoryItems.forEach(c => c.classList.remove('fw-bold','text-primary'));
-        document.querySelector('.category-item[data-category=""]').classList.add('fw-bold','text-primary');
+    // ====== Recherche produit ======
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', e => {
+        const query = e.target.value.toLowerCase();
+        document.querySelectorAll('.product-item').forEach(item => {
+            const name = item.querySelector('h5').textContent.toLowerCase();
+            item.style.display = name.includes(query) ? 'block' : 'none';
+        });
     });
 
+    updateCart();
 </script>
-
 </body>
 </html>
